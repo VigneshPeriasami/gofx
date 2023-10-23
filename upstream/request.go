@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/vigneshperiasami/analytics/environment"
 	"go.uber.org/fx"
 )
 
@@ -13,7 +12,12 @@ type UpstreamClient struct {
 	upstreamUrl string
 }
 
-func NewUpstreamClient(config *environment.ConfigResult) *UpstreamClient {
+type UpstreamParams struct {
+	fx.In
+	UpstreamUrl string `name:"upstreamUrl"`
+}
+
+func NewUpstreamClient(config UpstreamParams) *UpstreamClient {
 	return &UpstreamClient{
 		upstreamUrl: config.UpstreamUrl,
 	}

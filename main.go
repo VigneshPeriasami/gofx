@@ -8,8 +8,8 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/vigneshperiasami/analytics/cron"
-	"github.com/vigneshperiasami/analytics/database"
 	"github.com/vigneshperiasami/analytics/environment"
+	"github.com/vigneshperiasami/analytics/repository"
 	"github.com/vigneshperiasami/analytics/upstream"
 	"go.uber.org/fx"
 )
@@ -64,7 +64,7 @@ func main() {
 	fx.New(
 		environment.Module,
 		upstream.Module,
-		database.Module,
+		repository.Module,
 		cron.Module,
 		MainProgram,
 		fx.NopLogger,

@@ -4,16 +4,21 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/vigneshperiasami/analytics/environment"
+	"go.uber.org/fx"
 )
 
 type DbClient struct {
 	conn string
 }
 
-func NewDbClient(config *environment.ConfigResult) *DbClient {
+type DbParams struct {
+	fx.In
+	Conn string `name:"dbconn"`
+}
+
+func NewDbClient(dbParams DbParams) *DbClient {
 	return &DbClient{
-		conn: config.DbConn,
+		conn: dbParams.Conn,
 	}
 }
 

@@ -7,12 +7,13 @@ import (
 )
 
 type ConfigResult struct {
-	DbConn      string
-	UpstreamUrl string
+	fx.Out
+	DbConn      string `name:"dbconn"`
+	UpstreamUrl string `name:"upstreamUrl"`
 }
 
-func NewConfig() *ConfigResult {
-	return &ConfigResult{
+func NewConfig() ConfigResult {
+	return ConfigResult{
 		DbConn:      os.Getenv("DATABASE_ANALYTICS"),
 		UpstreamUrl: os.Getenv("ANALYTICS_UPSTREAM"),
 	}
