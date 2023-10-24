@@ -7,26 +7,31 @@ import (
 )
 
 type CompanyClient struct {
-	dbClient *database.DbClient
+	dbClient database.DbClient
 }
 
-func NewCompanyClient(dbClient *database.DbClient) *CompanyClient {
+func NewCompanyClient(dbClient database.DbClient) *CompanyClient {
 	return &CompanyClient{
 		dbClient: dbClient,
 	}
 }
 
-func (c *CompanyClient) GetCompanyTotalCount() int {
-	db, _ := c.dbClient.Open()
-	rows, _ := db.Query("select count(*) from Companies")
-
+func (c *CompanyClient) GetCompanyTotalCount() (int, error) {
+	db, err := c.dbClient.Open()
+	if err != nil {
+		return -1, err
+	}
+	rows, err := db.Query("select count(*) from Companies")
+	if err != nil {
+		return -1, err
+	}
 	defer db.Close()
 	defer rows.Close()
 
 	rows.Next()
 	var count int
 	rows.Scan(&count)
-	return count
+	return count, nil
 }
 
 // Reads all companies from the database
