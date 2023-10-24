@@ -5,10 +5,15 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/vigneshperiasami/analytics/models"
 	"go.uber.org/fx"
 )
 
-type UpstreamClient struct {
+type UpstreamClient interface {
+	GetCompanies() ([]models.Company, error)
+}
+
+type UpstreamClientResult struct {
 	upstreamUrl string
 }
 
@@ -17,13 +22,13 @@ type UpstreamParams struct {
 	UpstreamUrl string `name:"upstreamUrl"`
 }
 
-func NewUpstreamClient(config UpstreamParams) *UpstreamClient {
-	return &UpstreamClient{
+func NewUpstreamClient(config UpstreamParams) UpstreamClient {
+	return &UpstreamClientResult{
 		upstreamUrl: config.UpstreamUrl,
 	}
 }
 
-func (up *UpstreamClient) Get(path string) (*http.Response, error) {
+func (up *UpstreamClientResult) Get(path string) (*http.Response, error) {
 	return http.Get(fmt.Sprintf("%s/%s", up.upstreamUrl, path))
 }
 

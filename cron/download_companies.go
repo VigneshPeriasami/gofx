@@ -1,10 +1,8 @@
 package cron
 
 import (
-	"fmt"
 	"log"
 
-	"github.com/vigneshperiasami/analytics/models"
 	"github.com/vigneshperiasami/analytics/upstream"
 )
 
@@ -13,19 +11,18 @@ type CompaniesDownloader struct {
 	logger *log.Logger
 }
 
-func NewCompaniesDownloader(client *upstream.UpstreamClient, logger *log.Logger) Action {
+func NewCompaniesDownloader(client upstream.UpstreamClient, logger *log.Logger) Action {
 	return &CompaniesDownloader{
-		client: *client,
+		client: client,
 		logger: logger,
 	}
 }
 
 func (d *CompaniesDownloader) Execute() {
-	resp, err := d.client.Get(upstream.COMPANIES_PATH)
+	companies, err := d.client.GetCompanies()
 	if err != nil {
-		fmt.Println(err)
+		d.logger.Println("Error downloading companies: ", err)
+		return
 	}
-	var companies []models.Company
-	upstream.ReadJsonResponse[[]models.Company](resp, &companies)
 	d.logger.Printf("Total companies downloaded: %d\n", len(companies))
 }

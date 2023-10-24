@@ -20,6 +20,9 @@ func (c *CompanyClient) GetCompanyTotalCount() int {
 	db, _ := c.dbClient.Open()
 	rows, _ := db.Query("select count(*) from Companies")
 
+	defer db.Close()
+	defer rows.Close()
+
 	rows.Next()
 	var count int
 	rows.Scan(&count)
