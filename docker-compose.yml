@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  preloader:
+    environment:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_HOST=mysql
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - ANALYTICS_UPSTREAM=http://cdm-api:8080
+    build:
+      context: .
+      target: preloader
+    depends_on:
+      - mysql
+    networks:
+      - "cdm"
+
+  mysql:
+    build:
+      context: .
+      target: mysql-db
+      args:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - DATABASE_ANALYTICS=${DATABASE_ANALYTICS}
+        - ANALYTICS_UPSTREAM=http://cdm-api:8080
+    ports:
+      - 3306:3306
+    networks:
+      - "cdm"
+    volumes:
+      - dbdata:/var/lib/mysql
+  
+volumes:
+  dbdata:
+
+networks:
+  cdm:
+    name: "cdm"
