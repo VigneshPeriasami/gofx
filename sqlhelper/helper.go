@@ -30,9 +30,9 @@ func Flatten[T any, R any](modelList []T, fn func(T) []R) []R {
 	return flatten
 }
 
-type QueryBuilder func(values int) string
+type queryBuilder func(values int) string
 
-func InsertQuery(tableName string, columnArr []string) QueryBuilder {
+func insertQuery(tableName string, columnArr []string) queryBuilder {
 	columns := strings.Join(columnArr, ",")
 	return func(rows int) string {
 		return fmt.Sprintf(
@@ -40,4 +40,16 @@ func InsertQuery(tableName string, columnArr []string) QueryBuilder {
 			columns, queryPlaces(rows, len(columnArr)),
 		)
 	}
+}
+
+type MapperFn[T any] func(T) []interface{}
+
+type InsertQ[T any] struct {
+	TableName string
+	Columns   []string
+	MapperFn  MapperFn[T]
+}
+
+func (q *InsertQ[T]) Build(data []T) (string, []interface{}) {
+	return insertQuery(q.TableName, q.Columns)(len(data)), Flatten[T](data, q.MapperFn)
 }
