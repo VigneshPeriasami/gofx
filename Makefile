@@ -1,8 +1,11 @@
 
 .PHONY: build
-
 build:
 	go build ./...
+
+.PHONY: buildout
+buildout:
+	go build -o bin/
 
 .PHONY: test
 test:

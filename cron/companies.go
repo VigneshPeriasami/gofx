@@ -40,7 +40,9 @@ func (cp *CompanyPull) Execute() {
 		return
 	}
 
-	cp.logger.Printf("Sample Records:\n%v\n", companies)
+	if len(companies) > 2 {
+		cp.logger.Printf("Sample Records:\n%v\n", companies[:2])
+	}
 }
 
 var Module = fx.Options(

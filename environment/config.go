@@ -1,6 +1,7 @@
 package environment
 
 import (
+	"fmt"
 	"os"
 
 	"go.uber.org/fx"
@@ -13,8 +14,13 @@ type ConfigResult struct {
 }
 
 func NewConfig() ConfigResult {
+	dbconn := fmt.Sprintf(
+		"%s:%s@(%s:3306)/%s",
+		os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"),
+		os.Getenv("MYSQL_HOST"), os.Getenv("MYSQL_DATABASE"),
+	)
 	return ConfigResult{
-		DbConn:      os.Getenv("DATABASE_ANALYTICS"),
+		DbConn:      dbconn,
 		UpstreamUrl: os.Getenv("ANALYTICS_UPSTREAM"),
 	}
 }
