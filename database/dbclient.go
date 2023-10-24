@@ -7,7 +7,11 @@ import (
 	"go.uber.org/fx"
 )
 
-type DbClient struct {
+type DbClient interface {
+	Open() (*sql.DB, error)
+}
+
+type DbClientResult struct {
 	conn string
 }
 
@@ -16,13 +20,13 @@ type DbParams struct {
 	Conn string `name:"dbconn"`
 }
 
-func NewDbClient(dbParams DbParams) *DbClient {
-	return &DbClient{
+func NewDbClient(dbParams DbParams) DbClient {
+	return &DbClientResult{
 		conn: dbParams.Conn,
 	}
 }
 
-func (dbClient *DbClient) Open() (*sql.DB, error) {
+func (dbClient *DbClientResult) Open() (*sql.DB, error) {
 	db, err := sql.Open("mysql", dbClient.conn)
 	if err != nil {
 		return nil, err

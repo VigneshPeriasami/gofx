@@ -22,7 +22,7 @@ func NewCompanyCount(client *repository.CompanyClient, logger *log.Logger) Actio
 }
 
 func (c *CompanyCount) Execute() {
-	count := c.companyClient.GetCompanyTotalCount()
+	count, _ := c.companyClient.GetCompanyTotalCount()
 	c.logger.Println("Total companies in DB: ", count)
 }
 

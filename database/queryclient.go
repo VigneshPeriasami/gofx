@@ -8,7 +8,7 @@ import (
 )
 
 type QueryClient struct {
-	client *DbClient
+	client DbClient
 }
 
 type QueryResult struct {
@@ -16,7 +16,7 @@ type QueryResult struct {
 	rows *sql.Rows
 }
 
-func NewQuery(client *DbClient) *QueryClient {
+func NewQuery(client DbClient) *QueryClient {
 	return &QueryClient{
 		client: client,
 	}
