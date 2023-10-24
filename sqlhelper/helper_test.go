@@ -11,7 +11,7 @@ type Dummy struct {
 }
 
 func TestInsertQuery(t *testing.T) {
-	queryBuilder := InsertQuery("dummy", []string{"columnOne", "columnTwo"})
+	queryBuilder := insertQuery("dummy", []string{"columnOne", "columnTwo"})
 	assert.Equal(t, "INSERT into dummy (columnOne,columnTwo) VALUES (?,?),(?,?)", queryBuilder(2))
 }
 
