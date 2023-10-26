@@ -54,6 +54,6 @@ func TestInsertCompanies(t *testing.T) {
 	// remove the new company
 	db, err := DbClient.Open()
 	defer db.Close()
-	_, err = db.Query("DELETE from Companies where ID=?", companies[0].Id)
+	_, err = db.Query("DELETE from companies where ID=?", companies[0].Id)
 	require.NoError(t, err, "error deleting the inserted record")
 }
