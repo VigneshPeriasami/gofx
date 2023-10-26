@@ -18,3 +18,11 @@ install:
 .PHONY: run
 run:
 	go run main.go
+
+.PHONY: clean-docker
+clean-docker:
+	docker-compose down --rmi all -v --remove-orphans
+
+.PHONY: start-docker
+start-docker:
+	docker-compose up

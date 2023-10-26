@@ -11,3 +11,14 @@ func (u *UpstreamClientResult) GetCompanies() ([]models.Company, error) {
 	ReadJsonResponse[[]models.Company](resp, &companies)
 	return companies, nil
 }
+
+func (u *UpstreamClientResult) GetTransactions() ([]models.Transaction, error) {
+	resp, err := u.Get(TRANSACTIONS_PATH)
+
+	if err != nil {
+		return nil, err
+	}
+	var transactions []models.Transaction
+	ReadJsonResponse[[]models.Transaction](resp, &transactions)
+	return transactions, nil
+}

@@ -10,5 +10,9 @@ var Module = fx.Options(
 			NewCompaniesDownloader,
 			fx.ResultTags(ACTION_TAG),
 		),
+		fx.Annotate(
+			NewTransactionsDownloader,
+			fx.ResultTags(ACTION_TAG),
+		),
 	),
 )
