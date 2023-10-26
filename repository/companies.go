@@ -1,11 +1,15 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/vigneshperiasami/analytics/database"
 	"github.com/vigneshperiasami/analytics/models"
 	"github.com/vigneshperiasami/analytics/sqlhelper"
 	"go.uber.org/fx"
 )
+
+const TABLE_COMPANY = "companies"
 
 type CompanyClient struct {
 	dbClient database.DbClient
@@ -22,7 +26,7 @@ func (c *CompanyClient) GetCompanyTotalCount() (int, error) {
 	if err != nil {
 		return -1, err
 	}
-	rows, err := db.Query("select count(*) from Companies")
+	rows, err := db.Query(fmt.Sprintf("select count(*) from %s", TABLE_COMPANY))
 	if err != nil {
 		return -1, err
 	}
@@ -41,7 +45,7 @@ func (c *CompanyClient) GetAllCompanies() ([]models.Company, error) {
 	if err != nil {
 		return nil, err
 	}
-	rows, err := db.Query("select ID, Ibans, Name, Address from Companies")
+	rows, err := db.Query(fmt.Sprintf("select id, ibans, name, address from %s", TABLE_COMPANY))
 	if err != nil {
 		return nil, err
 	}
@@ -70,8 +74,8 @@ func (c *CompanyClient) InsertCompanies(companies []models.Company) error {
 	defer db.Close()
 
 	queryParams := sqlhelper.InsertQ[models.Company]{
-		TableName: "Companies",
-		Columns:   []string{"ID", "Ibans", "Name", "Address"},
+		TableName: TABLE_COMPANY,
+		Columns:   []string{"id", "ibans", "name", "address"},
 		MapperFn: func(company models.Company) []interface{} {
 			return []interface{}{company.Id, company.Ibans, company.Name, company.Address}
 		},

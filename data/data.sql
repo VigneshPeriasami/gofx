@@ -1,10 +1,10 @@
 CREATE DATABASE IF NOT EXISTS `MYSQL_DATABASE`;
 USE `MYSQL_DATABASE`;
 
-CREATE TABLE Companies (
-    ID int not NULL,
-    Ibans VARCHAR(255),
-    Name VARCHAR(255),
-    Address VARCHAR(255),
-    UNIQUE (ID)
+CREATE TABLE companies (
+    id int not NULL,
+    ibans VARCHAR(255),
+    name VARCHAR(255),
+    address VARCHAR(255),
+    UNIQUE (id)
 );
