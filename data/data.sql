@@ -8,3 +8,12 @@ CREATE TABLE companies (
     address VARCHAR(255),
     UNIQUE (id)
 );
+
+create TABLE transactions (
+    id VARCHAR(50) not NULL,
+    beneficiary VARCHAR(50) not NULL,
+    sender VARCHAR(50),
+    currency VARCHAR(10),
+    transactionTime timestamp,
+    amount DECIMAL(16, 4)
+);

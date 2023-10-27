@@ -88,6 +88,25 @@ func (c *CompanyClient) InsertCompanies(companies []models.Company) error {
 	return err
 }
 
+func (c *CompanyClient) InsertTransactions(transactions []models.Transaction) error {
+	db, err := c.dbClient.Open()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	queryParams := sqlhelper.InsertQ[models.Transaction]{
+		TableName: "transactions",
+		Columns:   []string{"id", "beneficiary", "sender", "currency", "transactionTime", "amount"},
+		MapperFn: func(t models.Transaction) []interface{} {
+			return []interface{}{t.Id, t.Beneficiary, t.Sender, t.Currency, t.Timestamp, t.Amount}
+		},
+	}
+	query, args := queryParams.Build(transactions)
+	_, err = db.Query(query, args...)
+	return err
+}
+
 var Module = fx.Options(
 	database.Module,
 	fx.Provide(

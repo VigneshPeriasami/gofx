@@ -3,6 +3,7 @@ package repository
 import (
 	"os"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -12,6 +13,9 @@ import (
 )
 
 var DbClient database.DbClient
+
+var FixedTime = time.Date(
+	2009, 11, 17, 20, 34, 58, 651387237, time.UTC)
 
 func TestMain(m *testing.M) {
 	resource := resource.CreateNewSqlDb("repository_setup", "../database/Dockerfile")
@@ -56,4 +60,20 @@ func TestInsertCompanies(t *testing.T) {
 	defer db.Close()
 	_, err = db.Query("DELETE from companies where ID=?", companies[0].Id)
 	require.NoError(t, err, "error deleting the inserted record")
+}
+
+func TestInsertTransactions(t *testing.T) {
+	client := NewCompanyClient(DbClient)
+	transactions := []models.Transaction{
+		{
+			Id:          "hey",
+			Amount:      2.1,
+			Currency:    "swd",
+			Sender:      "random-id-of-the-sender",
+			Beneficiary: "random-id-of-the-receiver",
+			Timestamp:   FixedTime,
+		},
+	}
+	err := client.InsertTransactions(transactions)
+	require.NoError(t, err, "Couldn't insert companies")
 }

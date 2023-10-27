@@ -11,6 +11,7 @@ import (
 
 type UpstreamClient interface {
 	GetCompanies() ([]models.Company, error)
+	GetTransactions() ([]models.Transaction, error)
 }
 
 type UpstreamClientResult struct {

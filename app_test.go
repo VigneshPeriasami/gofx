@@ -20,6 +20,6 @@ func TestAppFx(t *testing.T) {
 			crons = append(crons, params.Actions...)
 		}))
 		defer app.RequireStart().RequireStop()
-		assert.Equal(t, len(crons), 1)
+		assert.Equal(t, 2, len(crons))
 	})
 }
