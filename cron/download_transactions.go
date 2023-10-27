@@ -1,26 +1,12 @@
 package cron
 
-import (
-	"log"
-
-	"github.com/vigneshperiasami/analytics/repository"
-	"github.com/vigneshperiasami/analytics/upstream"
-)
-
 type TransactionsDownloader struct {
-	client upstream.UpstreamClient
-	repo   *repository.CompanyClient
-	logger *log.Logger
+	Downloader
 }
 
-func NewTransactionsDownloader(
-	client upstream.UpstreamClient,
-	repo *repository.CompanyClient,
-	logger *log.Logger) Action {
+func NewTransactionsDownloader(downloader Downloader) Action {
 	return &TransactionsDownloader{
-		client: client,
-		repo:   repo,
-		logger: logger,
+		downloader,
 	}
 }
 

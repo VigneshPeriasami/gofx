@@ -16,4 +16,4 @@ create TABLE transactions (
     currency VARCHAR(10),
     transactionTime timestamp,
     amount DECIMAL(16, 4)
-)
+);
