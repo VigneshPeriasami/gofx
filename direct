@@ -1,0 +1,28 @@
+from(bucket: "testrun")
+  |> range(start: -7d) // Adjust the time range as needed
+  |> filter(fn: (r) => r["_measurement"] == "testrun" and r["_field"] == "result")
+  |> map(fn: (r) => ({
+      commit: r.commit,
+      id: r.id,
+      pass: if r["_value"] == "pass" then 1 else 0,
+      fail: if r["_value"] == "fail" then 1 else 0,
+      last_time: r._time
+  }))
+  |> group(columns: ["commit", "id"])
+  |> reduce(
+      identity: {total_pass: 0, total_fail: 0, last_time: time(v: 0)},
+      fn: (r, accumulator) => ({
+          total_pass: accumulator.total_pass + r.pass,
+          total_fail: accumulator.total_fail + r.fail,
+          last_time: if r.last_time > accumulator.last_time then r.last_time else accumulator.last_time
+      })
+  )
+  |> map(fn: (r) => ({
+      commit: r.commit,
+      id: r.id,
+      total_pass: r.total_pass,
+      total_fail: r.total_fail,
+      last_time: r.last_time
+  }))
+  |> group()
+  |> sort(columns: ["last_time"], desc: true)
